@@ -6,7 +6,10 @@
     <button @click="handleIncrement">+1</button>
     <button @click="handleDecrease">-1</button>
     <button @click="handleMore">+10</button>
+    <button @click="handleAction">Action +1</button>
+    <button @click="handleAsync">Async +1</button>
     <div>{{list}}</div>
+    <div>{{listCount}}</div>
   </div>
 </template>
 <script>
@@ -16,7 +19,10 @@ export default {
       return this.$store.state.count;
     },
     list() {
-      return this.$store.state.list.filter(item => item < 10);
+      return this.$store.getters.filteredList;
+    },
+    listCount() {
+      return this.$store.getters.listCount;
     }
   },
   methods: {
@@ -33,6 +39,14 @@ export default {
       this.$store.commit({
         type: "increment",
         count: 10
+      });
+    },
+    handleAction() {
+      this.$store.dispatch("increment");
+    },
+    handleAsync() {
+      this.$store.dispatch("asyncIncrement").then(() => {
+        console.log(this.$store.state.count);
       });
     }
   }

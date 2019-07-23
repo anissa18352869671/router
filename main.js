@@ -38,15 +38,36 @@ const RouterConfig = {
 const store = new Vuex.Store({
     //vuex的配置
     state: {
-        count: 2,
+        count: 0,
         list: [1, 5, 8, 10, 30, 50]
     },
+    getters: {
+        filteredList: state => {
+            return state.list.filter(item => item < 10);
+        },
+        listCount: (state, getters) => {
+            return getters.filteredList.length;
+        }
+    },
     mutations: {
-        increment(state, params) {
-            state.count += params.count;
+        increment(state, n = 1) {
+            state.count += n;
         },
         decrease(state) {
             state.count--;
+        }
+    },
+    actions: {
+        increment(context) {
+            context.commit('increment');
+        },
+        asyncIncrement(context) {
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    context.commit('increment');
+                    resolve();
+                }, 1000)
+            })
         }
     }
 })
